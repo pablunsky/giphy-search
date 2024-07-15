@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { IResponse } from './types'
-import { debounce } from 'lodash'
+import { useDebounce } from "use-debounce";
 
 export default function Search() {
 
@@ -12,6 +12,7 @@ export default function Search() {
     const [offset, setOffset] = useState(0)
     const [data, setData] = useState<IResponse | null>()
     const [history, setHistory] = useState<string[]>([])
+    const [debouncedValue] = useDebounce(search, 500);
 
     const updateSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value)
@@ -63,12 +64,13 @@ export default function Search() {
             setData(data)
         }
 
-        if (search) {
-            updateData(search)
-            fetchHistory()
+        if (debouncedValue) {
+            updateData(debouncedValue).then(() => {
+                fetchHistory()
+            })
         }
         else setData(null)
-    }, [search, offset])
+    }, [debouncedValue, offset])
 
 
     return (

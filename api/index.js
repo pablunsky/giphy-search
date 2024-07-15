@@ -3,9 +3,10 @@ const axios = require('axios').default
 var cors = require('cors')
 const app = express()
 const port = 5000
+require('dotenv').config()
 
-const API_KEY = "pLURtkhVrUXr3KG25Gy5IvzziV5OrZGa"
-const API_URL = "https://api.giphy.com/v1/gifs/search"
+const API_KEY = process.env.API_KEY
+const API_URL = process.env.API_URL
 
 let history = []
 
